@@ -86,13 +86,6 @@ ggplot(a, aes(x=Type, y= sig_low, fill=Type)) + geom_boxplot2(width = 0.8, width
 dev.off()
 
 
-
-ylim1 = boxplot.stats(a$mye_Diff)$stats[c(1, 5)]
-
-# scale y limits based on ylim1
-p1 = p0 + coord_cartesian(ylim = ylim1*1.05)
-p1
-
 pdf("wt_myeloid_pair_type_poor.pdf",width=20)
 ggplot(a, aes(x=as.factor(Number), y= sig_high, fill=Type)) + geom_boxplot()+theme(text=element_text(size=21))+ stat_compare_means(aes(group = Type), label = "p.signif")+ ylab("mye_poor_surv")
 dev.off()
@@ -122,43 +115,5 @@ dev.off()
 pdf("wt_malignant_pair_tumor_type1.pdf",width=10)
 ggplot(b, aes(x=Type, y= malig_Diff, fill=Type)) + geom_boxplot2(width = 0.8, width.errorbar = 0.5)+ stat_compare_means(aes(group = Type), label = "p.signif",label.x = 1.5, label.y = 0.21,size=15)+theme(text=element_text(size=21))
 dev.off()
-
-
-
-
-
-ggboxplot(a, x = "Number", y = "mye_Diff",
-          color = "Type")+ stat_compare_means(aes(group = Type), label = "p.signif")
-
-
-
-#res<-scgsva(myeloid,sign)
-
-colnames(myeloid1@meta.data)[26]="sig_high"
-colnames(myeloid1@meta.data)[27]="sig_low"
-myeloid1@meta.data$Diff=myeloid1@meta.data[,26]-myeloid1@meta.data[,27]
-
-
-p2 <- ggplot(a, aes(x=Number, y= sig_high, fill=Type)) + 
-    geom_boxplot() +
-    facet_wrap(~ Number, scale="free",nrow = 2)
-
-p3=ggplot(myeloid1@meta.data, aes(x=as.factor(Tumor.site), y=Diff, fill=Type)) +geom_boxplot()+facet_wrap(~ as.factor(Tumor.site), scale="free",nrow = 2)
-
-p4=ggplot(myeloid1@meta.data, aes(x=as.factor(Sex), y=Diff, fill=Type)) +geom_boxplot()+facet_wrap(~ as.factor(Sex), scale="free",nrow = 2)
-
-
-sign2=read.csv("comm_genes_wt_malignant_sign_for_gsva.csv",header=T)
-malignant1=AddModuleScore(malignant,sign2)
-
-
-
-
-write.csv(malignant1@meta.data,"paired_snRNA_glioma_malignant_with_surv_signature_metadata.csv")
-write.csv(myeloid1@meta.data,"paired_snRNA_glioma_myeloid_with_surv_signature_metadata.csv")
-
-
-
-pair_sn_mye=read.csv("paired_snRNA_glioma_myeloid_with_surv_signature_metadata.csv",header=T,row.names=1)
 
 
